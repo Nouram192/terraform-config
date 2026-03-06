@@ -1,0 +1,36 @@
+# application.yml
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      routes:
+        # Route vers user-service
+        - id: terraform-studio-user-service
+          uri: lb://terraform-studio-user-service        # lb = load balancer via Eureka
+          predicates:
+            - Path=/api/users/**
+          filters:
+            - StripPrefix=0
+
+        # Route vers project-service
+        - id: project-service
+          uri: lb://project-service
+          predicates:
+            - Path=/api/projects/**
+
+      # CORS pour Angular
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:4200"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
