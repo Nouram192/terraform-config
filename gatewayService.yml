@@ -9,8 +9,8 @@ spring:
     gateway:
       routes:
         # Route vers user-service
-        - id: terraform-studio-user-service
-          uri: lb://terraform-studio-user-service        # lb = load balancer via Eureka
+        - id: UserService
+          uri: lb://UserService         # lb = load balancer via Eureka
           predicates:
             - Path=/api/users/**
           filters:
