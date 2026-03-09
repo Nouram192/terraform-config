@@ -1,0 +1,41 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/terraform_studio_user_db
+    username: postgres
+    password: ${POSTGRES_PASSWORD:safsaf}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    open-in-view: false
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    user: postgres
+    password: ${POSTGRES_PASSWORD:safsaf}
+    contexts: dev
+
+server:
+  port: 8085
+
+application:
+  security:
+    jwt:
+      secret-key: ${JWT_SECRET_KEY:DXLiNM7JyOW2m/aVgatswyBEaSH9QK5iBMvwMCmt8Mo=}
+      expiration: 3600000
+      token-prefix: Bearer
+      token-header: Authorization
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
