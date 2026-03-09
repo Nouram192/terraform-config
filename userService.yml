@@ -1,13 +1,61 @@
 # ── Config spécifique au User Service ──
 server:
-  port: 8081
+  port: ${USER_SERVICE_PORT:8085}
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/users_db
-    username: postgres
-    password: postgres
+    url: ${USER_SERVICE_DB_URL:jdbc:postgresql://localhost:5432/terraform_studio_user_db}
+    username: ${USER_SERVICE_DB_USERNAME:postgres}
+    password: ${USER_SERVICE_DB_PASSWORD:safsaf}
+    driver-class-name: org.postgresql.Driver
+
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 10
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      auto-commit: false
+
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: ${JPA_DDL_AUTO:validate}
+    show-sql: ${JPA_SHOW_SQL:true}
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        connection:
+          provider_disables_autocommit: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          time_zone: UTC
+          batch_size: 20
+        order_inserts: true
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    default-schema: public
+    contexts: ${LIQUIBASE_CONTEXT:dev}
+    drop-first: false
+
+application:
+  security:
+    jwt:
+      secret-key: ${JWT_SECRET_KEY:+PUDuLE65+e4wWZ+E8bZQhVSO/PZxxEYzBZkNcFk280=}
+      expiration: ${JWT_EXPIRATION:3600000}
+      token-prefix: Bearer
+      token-header: Authorization
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICE_URL:http://localhost:8761/eureka/}
+
+logging:
+  level:
+    root: ${LOG_LEVEL_ROOT:INFO}
+    org.springframework.security: ${LOG_LEVEL_SECURITY:DEBUG}
+    org.hibernate.SQL: ${LOG_LEVEL_SQL:DEBUG}
