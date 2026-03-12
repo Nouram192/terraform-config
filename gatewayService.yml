@@ -1,4 +1,3 @@
-# application.yml
 server:
   port: 8080
 
@@ -8,30 +7,36 @@ spring:
   cloud:
     gateway:
       routes:
-        # Route vers user-service
-        - id: UserService
-          uri: lb://UserService         # lb = load balancer via Eureka
+        - id: user-service
+          uri: lb://USERSERVICE
           predicates:
-            - Path=/api/users/**
-            - Path=/api/auth/**
-            - Path=/api/admin/**
-            - Path=/api/test/**
+            - Path=/api/users/**, /api/auth/**, /api/admin/**, /api/test/**
           filters:
             - StripPrefix=0
 
-        # Route vers project-service
         - id: project-service
           uri: lb://project-service
           predicates:
             - Path=/api/projects/**
+          filters:
+            - StripPrefix=0
 
-      # CORS pour Angular
       globalcors:
         cors-configurations:
           '[/**]':
             allowedOrigins: "http://localhost:4200"
             allowedMethods: "*"
             allowedHeaders: "*"
+
+# AJOUTEZ CES LIGNES POUR ACTUATOR
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"  # Expose tous les endpoints Actuator
+  endpoint:
+    gateway:
+      enabled: true  # Active spécifiquement l'endpoint gateway
 
 eureka:
   client:
