@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/terraform_studio_user_db
     username: postgres
-    password: ${POSTGRES_PASSWORD:safsaf}
+    password: ${POSTGRES_PASSWORD:nounou1806}
     driver-class-name: org.postgresql.Driver
 
   jpa:
