@@ -19,7 +19,7 @@ spring:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.xml
     user: postgres
-    password: ${POSTGRES_PASSWORD:safsaf}
+    password: ${POSTGRES_PASSWORD:nounou1806}
     contexts: dev
 
 server:
