@@ -13,6 +13,9 @@ spring:
           uri: lb://UserService         # lb = load balancer via Eureka
           predicates:
             - Path=/api/users/**
+            - Path=/api/auth/**
+            - Path=/api/admin/**
+            - Path=/api/test/**
           filters:
             - StripPrefix=0
 
